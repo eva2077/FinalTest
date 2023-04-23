@@ -1,0 +1,17 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Book
+@*Allow user to confirm if they want to delete*@
+<h2>Confirm Deletion</h2>
+<h3>Are you sure you want to delete the record for @Model.Title </h3>
+
+<form method="post" asp-controller="Home" asp-action="Delete">
+    @*submit to delete*@
+    <button type"submit">Delete</button>
+    @*cancel and take back to movie list*@
+    <a asp-asp-controller="Home" asp-action="Index" class="btn btn-primary">Cancel</a>
+    <input type="hidden" asp-for="BookID" />
+</form>
