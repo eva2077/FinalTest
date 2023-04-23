@@ -26,6 +26,8 @@ namespace FinalTest
                 options.UseSqlite(Configuration["ConnectionStrings:Connection"]);
 
             });
+            //Repo
+            services.AddScoped<IRepo, EFRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

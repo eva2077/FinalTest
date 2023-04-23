@@ -9,15 +9,16 @@ namespace FinalTest.Controllers;
 public class HomeController : Controller
 {
 
-    private Context _context { get; set; }
-    public HomeController(Context temp)
+    private IRepo _repo { get; set; }
+    public HomeController(IRepo temp)
     {
-        _context = temp;
+        _repo = temp;
     }
     //The list will be pasted to the view
     public IActionResult Index()
     {
-        var x = _context.Books
+        var x = _repo.Books
+            //Lets you filter
             //.Where(x => x.Category == "Comedy")
             .ToList();
 
@@ -32,13 +33,12 @@ public class HomeController : Controller
         return View();
     }
 
+
     //Add to list from the form 
     [HttpPost]
     public IActionResult Form(Book response)
     {
-
-        _context.Add(response);
-        _context.SaveChanges();
+        _repo.Add(response);
         return RedirectToAction("Index");
     }
 
@@ -48,17 +48,16 @@ public class HomeController : Controller
     public IActionResult Edit(int id)
     {
         //populate with the right movie info based on id
-        var application = _context.Books.Single(x => x.BookID == id);
+        var book = _repo.GetById(id);
         //Take you to the form 
-        return View("Form", application);
+        return View("Form", book);
     }
     //post info of edit
     [HttpPost]
     public IActionResult Edit(Book change)
     {
-        _context.Update(change);
-        _context.SaveChanges();
-        return RedirectToAction("Form");
+        _repo.UpdateBook(change);
+        return RedirectToAction("Index");
     }
 
 
@@ -66,17 +65,16 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult Delete(int id)
     {
-        //get information of the movieId that will be deleted based on id
-        var application = _context.Books.Single(x => x.BookID == id);
-        return View(application);
+        //get information of the bookID that will be deleted based on id
+        var book = _repo.GetById(id);
+        return View(book);
     }
 
     //Post deleted results 
     [HttpPost]
     public IActionResult Delete(Book response)
     {
-        _context.Books.Remove(response);
-        _context.SaveChanges();
+        _repo.Delete(response);
 
         return RedirectToAction("Index");
     }
